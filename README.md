@@ -1,6 +1,6 @@
 # travnik_dashboard
 
-A new Flutter project.
+My car dashboard app.
 
 ## Getting Started
 

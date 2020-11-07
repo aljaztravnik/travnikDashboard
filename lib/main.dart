@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() => runApp(TravnikDashboard());
 
 
-class TravnikDashboard extends StatelessWidget {
-  // This widget is the root of your application.
+class TravnikDashboard extends StatelessWidget 
+{
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
     return MaterialApp(
       title: 'travnikDashboard',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'Home'),
@@ -29,20 +32,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  String time;
+  var geolocator = Geolocator();
+  Position position;
+  var speedInKmh = 0.0;
 
-  void _incrementCounter() {
+  void getTime() {
+    final DateTime now = DateTime.now();
+    final String formattedDateTime = formatDateTime(now);
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      time = formattedDateTime;
     });
   }
 
+  String formatDateTime(DateTime dateTime) {
+    return DateFormat('MM/dd/yyyy hh:mm:ss').format(dateTime);
+  }
+
   @override
+
+  void initState() async
+  {
+    time = formatDateTime(DateTime.now());
+    Timer.periodic(Duration(seconds: 1), (Timer t) => getTime());
+
+    position = await Geolocator.getLastKnownPosition();
+    //var options = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+    Geolocator.getPositionStream().listen((position) {
+      speedInKmh = position.speed * 3.6; // position.speed is in m/s, so we have to multiply it by 3.6
+    });
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -50,37 +71,41 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+          children: <Widget>
+          [
+            Row
+            (
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>
+              [
+                Text("$speedInKmh", style: TextStyle(color: Color(0x000000))),
+                Text("$time", style: TextStyle(color: Color(0x000000))),
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Padding(padding: EdgeInsets.only(bottom: 10.0)),
+            Row
+            (
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>
+              [
+                FloatingActionButton
+                (
+                  onPressed: () => print("navigacija\n"),
+                  child: Center(child: Text("Navigation", style: TextStyle(color: Color(0xffffff)),)),
+                  backgroundColor: Color(0x404040),
+                ),
+                FloatingActionButton
+                (
+                  onPressed: () => print("g-meter\n"),
+                  child: Center(child: Text("G-meter", style: TextStyle(color: Color(0xffffff)),)),
+                  backgroundColor: Color(0x404040),
+                ),
+              ],
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

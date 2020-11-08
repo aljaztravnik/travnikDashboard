@@ -4,17 +4,24 @@ import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 void main() => runApp(TravnikDashboard());
-
 
 class TravnikDashboard extends StatelessWidget 
 {
   @override
-  Widget build(BuildContext context) 
+  Widget build(BuildContext context)
   {
     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
-    return MaterialApp(
+    return MaterialApp
+    (
+      initialRoute: '/',
+      routes: 
+      {
+        //'listenScreen' : (context) => ListenScreen(),
+      },
+
       title: 'travnikDashboard',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -35,8 +42,13 @@ class _MyHomePageState extends State<MyHomePage> {
   String time;
   LocationPermission permission;
   var geolocator = Geolocator();
-  Position position;
+  Position currPosition, prevPosition;
   var speedInKmh = 0.0;
+  bool firstLocation = false;
+  double distance = 0.0;
+  stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _text = '';
 
   void getTime() {
     final DateTime now = DateTime.now();
@@ -54,8 +66,38 @@ class _MyHomePageState extends State<MyHomePage> {
   void requestPerms() async
   {
     permission = await Geolocator.requestPermission();
-    position = await Geolocator.getLastKnownPosition();
+    currPosition = await Geolocator.getLastKnownPosition();
   }
+
+  void _listen() async
+    {
+      if(!_isListening)
+      {
+        bool available = await _speech.initialize(
+          onStatus: (val) => print("onStatus: $val"),
+          onError: (val) => print("onError: $val"),
+        );
+        if(available)
+        {
+          setState(() {
+            _isListening = true;
+          });
+          _speech.listen(
+            onResult: (val) => setState((){
+              _text = val.recognizedWords;
+            }),
+          );
+        }
+      }
+      else
+      {
+        setState(() {
+        _isListening = false;
+        });
+        _speech.stop();
+        print("RECEIVED TEXT: $_text");
+      }
+    }
 
   @override
 
@@ -64,16 +106,27 @@ class _MyHomePageState extends State<MyHomePage> {
     time = formatDateTime(DateTime.now());
     Timer.periodic(Duration(seconds: 1), (Timer t) => getTime());
     //var options = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
-    Geolocator.getPositionStream().listen((position) {
-      speedInKmh = position.speed * 3.6; // position.speed is in m/s, so we have to multiply it by 3.6
+    Geolocator.getPositionStream().listen((currPosition) {
+      speedInKmh = currPosition.speed * 3.6; // position.speed is in m/s, so we have to multiply it by 3.6
+      prevPosition = currPosition;
+      distance += (Geolocator.distanceBetween(prevPosition.latitude, prevPosition.longitude, currPosition.latitude, currPosition.longitude)) / 1000.0;
     });
     super.initState();
+    _speech = stt.SpeechToText();
   }
 
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     return Scaffold
     (
       backgroundColor: Colors.lightBlue,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton
+      (
+        onPressed: () {_listen();},
+        backgroundColor: Colors.white,
+        child: Icon(_isListening ? MdiIcons.microphoneOff : MdiIcons.microphone, color: Colors.black),
+      ),
       body: Container
       (
         child: Column
@@ -81,15 +134,20 @@ class _MyHomePageState extends State<MyHomePage> {
           //mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>
           [
+            Padding(padding: EdgeInsets.only(top: 15)),
             Container
             (
               alignment: Alignment.topRight,
               child: Text("$time", style: TextStyle(color: Colors.white, fontSize: 30)),
             ),
-            Container
+            Row
             (
-              alignment: Alignment.center,
-              child: Text("${speedInKmh.round()} km/h", style: TextStyle(color: Colors.white, fontSize: 50)),
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>
+              [
+                Text("${speedInKmh.round()} km/h", style: TextStyle(color: Colors.white, fontSize: 50)),
+                Text("${distance.toStringAsFixed(1)} km", style: TextStyle(color: Colors.white, fontSize: 50)),
+              ],
             ),
             Padding(padding: EdgeInsets.only(bottom: 10.0)),
             Row
@@ -121,8 +179,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-            
-
           ],
         ),
       ),

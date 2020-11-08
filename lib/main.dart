@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'dart:math';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 void main() => runApp(TravnikDashboard());
@@ -21,14 +20,13 @@ class TravnikDashboard extends StatelessWidget
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Home'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  MyHomePage({Key key,}) : super(key: key);
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -49,7 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   String formatDateTime(DateTime dateTime) {
-    return DateFormat('MM/dd/yyyy hh:mm:ss').format(dateTime);
+    //return DateFormat.jms().format(dateTime);
+    return DateFormat('HH:mm:ss').format(dateTime);
   }
 
   void requestPerms() async
@@ -74,26 +73,23 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold
     (
-      backgroundColor: Colors.black,
-      appBar: AppBar
-      (
-        title: Text(widget.title),
-      ),
-      body: Center
+      backgroundColor: Colors.lightBlue,
+      body: Container
       (
         child: Column
         (
-          mainAxisAlignment: MainAxisAlignment.center,
+          //mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>
           [
-            Row
+            Container
             (
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>
-              [
-                Text("${speedInKmh.round()} km/h", style: TextStyle(color: Colors.white, fontSize: 50)),
-                Text("$time", style: TextStyle(color: Colors.white, fontSize: 30)),
-              ],
+              alignment: Alignment.topRight,
+              child: Text("$time", style: TextStyle(color: Colors.white, fontSize: 30)),
+            ),
+            Container
+            (
+              alignment: Alignment.center,
+              child: Text("${speedInKmh.round()} km/h", style: TextStyle(color: Colors.white, fontSize: 50)),
             ),
             Padding(padding: EdgeInsets.only(bottom: 10.0)),
             Row
@@ -101,22 +97,32 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>
               [
-                RaisedButton
+                SizedBox
                 (
-                  onPressed: () => print("navigation"),
-                  child: Icon(MdiIcons.navigationOutline, color: Colors.black, size: 40),
-                  color: Colors.white,
-                  elevation: 5.0,
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: RaisedButton
+                  (
+                    onPressed: () => print("navigation"),
+                    child: Icon(MdiIcons.navigationOutline, color: Colors.black, size: 40),
+                    color: Colors.white,
+                    elevation: 5.0,
+                  ),  
                 ),
-                RaisedButton
+                SizedBox
                 (
-                  onPressed: () => print("g-meter\n"), // go to G-meter screen
-                  child: Center(child: Text("G-meter", style: TextStyle(color: Colors.black, fontSize: 30))),
-                  color: Colors.white,
-                  elevation: 5.0,
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: RaisedButton
+                  (
+                    onPressed: () => print("g-meter\n"), // go to G-meter screen
+                    child: Center(child: Text("G-meter", style: TextStyle(color: Colors.black, fontSize: 30))),
+                    color: Colors.white,
+                    elevation: 5.0,
+                  ),
                 ),
               ],
             ),
+            
+
           ],
         ),
       ),

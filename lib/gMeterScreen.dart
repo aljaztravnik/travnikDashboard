@@ -51,14 +51,23 @@ class _GMeterScreen extends State<GMeterScreen>
     (
       //backgroundColor: Colors.lightBlue,
       backgroundColor: Color(0xff444852),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton
+      (
+        onPressed: () {Navigator.pop(context);},
+        backgroundColor: Colors.white,
+        child: Icon(MdiIcons.arrowLeft, color: Colors.black),
+      ),
       body: Column
       (
         children: <Widget>
         [
-          Padding(padding: EdgeInsets.only(top: 25)),
+          /*Padding(padding: EdgeInsets.only(top: 25)),
           Container
           (
-            alignment: Alignment.topLeft,
+            alignment: Alignment.centerLeft,
+            //width: MediaQuery.of(context).size.width / 10,
+            //height: MediaQuery.of(context).size.height / 5,
             child: RaisedButton
             (
               elevation: 5.0,
@@ -70,11 +79,11 @@ class _GMeterScreen extends State<GMeterScreen>
               color: Colors.white,
               child: Icon(MdiIcons.arrowLeft, color: Colors.black),
             ),
-          ),
+          ),*/
           Container
           (
-            width: 150,
-            height: 150,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             child: CustomPaint(
               painter: OpenPainter(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height, _y, _z),
             ),
@@ -91,12 +100,18 @@ class OpenPainter extends CustomPainter
   @override
   void paint(Canvas canvas, Size size)
   {
+    if(_y > 10) _y = 10;
+    else if(_y < -10) _y = -10;
+    if(_z > 10) _z = 10;
+    else if(_z < -10) _z = -10;
+    double offsetX = ((widthh / 2) + ((_y*50) / 10));
+    double offsetY = ((heightt / 2) + ((_z*50) / 10));
     var paint1 = Paint()
       ..color = Color(0xffffffff)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    canvas.drawCircle(Offset((heightt / 2) - 50 - 25, (heightt / 2) - 50 - 10), 100, paint1);
-    canvas.drawCircle(Offset((heightt / 2) - 50 - 25, (heightt / 2) - 50 - 10), 10, paint1);
+    canvas.drawCircle(Offset((widthh / 2), (heightt / 2)), 100, paint1);
+    canvas.drawCircle(Offset(offsetX, offsetY), 10, paint1);
     //canvas.drawCircle(Offset(0, 0), 100, paint1);
   }
   @override

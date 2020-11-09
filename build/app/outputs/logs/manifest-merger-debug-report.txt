@@ -7,6 +7,7 @@ INJECTED from /home/aljaztravnik/Desktop/flutterProjects/travnikDashboard/androi
 MERGED from /home/aljaztravnik/Desktop/flutterProjects/travnikDashboard/android/app/src/main/AndroidManifest.xml:1:1-47:12
 MERGED from [:speech_to_text] /home/aljaztravnik/Desktop/flutterProjects/travnikDashboard/build/speech_to_text/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:geolocator] /home/aljaztravnik/Desktop/flutterProjects/travnikDashboard/build/geolocator/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
+MERGED from [:sensors] /home/aljaztravnik/Desktop/flutterProjects/travnikDashboard/build/sensors/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.gms:play-services-location:17.0.0] /home/aljaztravnik/.gradle/caches/transforms-2/files-2.1/df3d45654315cc7c4e9333a3fb7b0815/play-services-location-17.0.0/AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.android.gms:play-services-base:17.0.0] /home/aljaztravnik/.gradle/caches/transforms-2/files-2.1/5ac9ad6f13ea0190a3570ea7a43d9f59/play-services-base-17.0.0/AndroidManifest.xml:17:1-29:12
 MERGED from [com.google.android.gms:play-services-places-placereport:17.0.0] /home/aljaztravnik/.gradle/caches/transforms-2/files-2.1/f1aaa6d621f3c652ee6fe5723a143b22/play-services-places-placereport-17.0.0/AndroidManifest.xml:17:1-24:12
@@ -116,6 +117,8 @@ MERGED from [:speech_to_text] /home/aljaztravnik/Desktop/flutterProjects/travnik
 MERGED from [:speech_to_text] /home/aljaztravnik/Desktop/flutterProjects/travnikDashboard/build/speech_to_text/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:geolocator] /home/aljaztravnik/Desktop/flutterProjects/travnikDashboard/build/geolocator/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:geolocator] /home/aljaztravnik/Desktop/flutterProjects/travnikDashboard/build/geolocator/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:sensors] /home/aljaztravnik/Desktop/flutterProjects/travnikDashboard/build/sensors/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:sensors] /home/aljaztravnik/Desktop/flutterProjects/travnikDashboard/build/sensors/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.gms:play-services-location:17.0.0] /home/aljaztravnik/.gradle/caches/transforms-2/files-2.1/df3d45654315cc7c4e9333a3fb7b0815/play-services-location-17.0.0/AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.gms:play-services-location:17.0.0] /home/aljaztravnik/.gradle/caches/transforms-2/files-2.1/df3d45654315cc7c4e9333a3fb7b0815/play-services-location-17.0.0/AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.gms:play-services-base:17.0.0] /home/aljaztravnik/.gradle/caches/transforms-2/files-2.1/5ac9ad6f13ea0190a3570ea7a43d9f59/play-services-base-17.0.0/AndroidManifest.xml:20:5-44

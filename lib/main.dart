@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'gMeterScreen.dart';
 
 void main() => runApp(TravnikDashboard());
 
@@ -19,7 +20,7 @@ class TravnikDashboard extends StatelessWidget
       initialRoute: '/',
       routes: 
       {
-        //'listenScreen' : (context) => ListenScreen(),
+        'gMeterScreen' : (context) => GMeterScreen(),
       },
 
       title: 'travnikDashboard',
@@ -96,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
         _speech.stop();
         print("RECEIVED TEXT: $_text");
+        _text = '';
       }
     }
 
@@ -119,7 +121,8 @@ class _MyHomePageState extends State<MyHomePage> {
   {
     return Scaffold
     (
-      backgroundColor: Colors.lightBlue,
+      //backgroundColor: Colors.lightBlue,
+      backgroundColor: Color(0xff444852),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton
       (
@@ -171,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: MediaQuery.of(context).size.width / 4,
                   child: RaisedButton
                   (
-                    onPressed: () => print("g-meter\n"), // go to G-meter screen
+                    onPressed: () => Navigator.pushNamed(context, 'gMeterScreen'), // go to G-meter screen
                     child: Center(child: Text("G-meter", style: TextStyle(color: Colors.black, fontSize: 30))),
                     color: Colors.white,
                     elevation: 5.0,
